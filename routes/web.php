@@ -22,7 +22,9 @@ Route::get('/', function () {
 Route::get('/allCar', [CarController::class, 'index']);
 Route::get('/Cars/{id}', [CarController::class, 'show']);
 
+
 Route::resource('cars', CarController::class);
+Route::get('/cars/create', [CarController::class, 'create']);
 // Route::get('/car/{id}', [Carcontroller::class, 'show'])->name('car.detail');
 
 // Route::resource('cars' . CarController::class);
