@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Car;
 
 class CarController extends Controller
@@ -14,8 +15,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars=Car::all();
-        return view('car-list',compact('cars'));
+        $cars = Car::all();
+        return view('car-list', compact('cars'));
     }
 
     /**
@@ -25,7 +26,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        //
+
         return view('car-create');
     }
 
@@ -35,19 +36,9 @@ class CarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-        $car = new Car;
-        $car->make = $request->make;
-        $car->model = $request->model;
-        $car->year = $request->year;
-        $car->color = $request->color;
-        $car->price = $request->price;
-        $car->save();
 
-        return redirect('/cars/create')->with('success', 'Car created successfully.');
-    }
+    public function store(Request $request)
+
 
     /**
      * Display the specified resource.
@@ -57,9 +48,9 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        //
-        $car=Car::find($id);
-        return view('car-detail',compact('car'));
+        $car = Car::find($id);
+        // dd($car);
+        return view('car-detail', compact('car'));
     }
 
     /**
@@ -78,7 +69,7 @@ class CarController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
