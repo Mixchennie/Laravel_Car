@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Car;
 use Illuminate\Support\Facades\DB;
@@ -20,13 +19,13 @@ class CarSeeder extends Seeder
         DB::table('cars')->insert([
             'description' => Str::random(10),
             'model' => Str::random(10),
-            'produced_on' => Carbon::parse('2024-01-01'), // Fix date format issue
-            'image' => 'car1.jpg'
+            'produced_on' => Carbon::parse('2024-01-01')->toDateTimeString(),
+            'image' => 'car2.jpg'
         ]);
 
-        // Use factory to create 30 more records
+        // Use factory to create more records
         Car::factory()
-            ->count(100) // Chỉ tạo 30 dòng
+            ->count(30)
             ->create();
     }
 }

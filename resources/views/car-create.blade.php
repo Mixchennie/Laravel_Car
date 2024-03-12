@@ -1,100 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Car</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Your Form</title>
+    <style>
+        /* Custom styles go here, if needed */
+        .form-create {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 180px;
+        }
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        .custom-form {
+            max-width: 900px;
+        }
 
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
+        .form-control {
+            min-width: 600px;
+        }
 
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 40px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(110, 228, 246, 0.886);
-    }
+        .error-label {
+            color: red;
+        }
 
-    h1 {
-      font-size: 30px;
-      margin-bottom: 30px;
-      text-align: center;
-      color: #e41010;
-    }
-
-    label {
-      font-weight: bold;
-      color: #555;
-    }
-
-    input[type="text"],
-    input[type="number"] {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      margin-bottom: 20px;
-      font-size: 16px;
-      color: #555;
-    }
-
-    input[type="submit"] {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      border: none;
-      color: #fff;
-      font-weight: bold;
-      text-align: center;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
-
-    input[type="submit"]:hover {
-      background-color: #0069d9;
-    }
-  </style>
+        #image-preview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            display: none; /* Initially hide the image preview */
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Trang Thêm Mới Một Xe</h1>
+    <div class="container">
+        <div class="col-md-12 align-content-center mt-5">
+            <h1 class="text-center text-danger" id="animation">Thêm mới sản phẩm</h1>
+        </div>
+        <div class="col-md-8 form-create">
+            <form action="{{ route('cars.store') }}" method="post" enctype="multipart/form-data" class="custom-form">
+                @csrf
 
-    <form action="/create-car" method="POST">
-      <div class="form-group">
-        <label for="make">Model:</label>
-        <input type="text" id="make" name="make" class="form-control" required>
-      </div>
+                <div class="form-group">
+                    <label for="model" class="@error('model') error-label @enderror">Model:</label>
+                    <input type="text" class="form-control @error('model') is-invalid @enderror" id="model" name="model" value="{{ old('model') }}" placeholder="Enter model">
+                    @error('model')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-      <div class="form-group">
-        <label for="model">Description:</label>
-        <input type="text" id="model" name="model" class="form-control" required>
-      </div>
+                <div class="form-group">
+                    <label for="produced_on" class="@error('produced_on') error-label @enderror">Produced On:</label>
+                    <input type="date" class="form-control @error('produced_on') is-invalid @enderror" id="produced_on" name="produced_on" value="{{ old('produced_on') }}" placeholder="Enter produced on">
+                    @error('produced_on')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-      <div class="form-group">
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" class="form-control" required>
-      </div>
+                <div class="form-group">
+                    <label for="description" class="@error('description') error-label @enderror">Description:</label>
+                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="Enter description">{{ old('description') }}</textarea>
+                    @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-      <div class="form-group">
-        <label for="img">Image:</label>
-        <input type="file" id="img" name="img" accept="image/*" class="form-control-file" required>
-      </div>
+                <div class="form-group">
+                    <label for="image" class="@error('image') error-label @enderror">Image:</label>
+                    <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image" onchange="previewImage(this)">
+                    @error('image')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <img id="image-preview" src="#" alt="Image Preview">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
 
-      <input type="submit" value="Tạo xe" class="btn btn-primary">
-    </form>
-  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>
+        function previewImage(input) {
+            var preview = document.getElementById('image-preview');
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // Display the image preview
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none'; // Hide the image preview
+            }
+        }
+    </script>
+</body>
+
+</html>

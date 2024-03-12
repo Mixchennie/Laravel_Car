@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('model');
             $table->date('produced_on');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

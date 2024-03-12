@@ -26,7 +26,6 @@ class CarController extends Controller
      */
     public function create()
     {
-
         return view('car-create');
     }
 
@@ -38,7 +37,37 @@ class CarController extends Controller
      */
 
     public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'model' => 'required',
+            'produced_on' => 'required|date',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $car = new Car();
+
+        $car->model = $request->input('model');
+        $car->produced_on = $request->input('produced_on');
+        $car->description = $request->input('description');
+
+        $image = $request->file('image');
+
+        $imageName = time() . '_' . $image->getClientOriginalName();
+
+        $image->move(public_path('images'), $imageName);
+        $car->image = $imageName;
+
+        $car->save();
+
+        $function = 'Thêm mới sản phẩm thành công';
+
+        return redirect()->route('cars.index')->with('message', $function);
+    }
 
     /**
      * Display the specified resource.

@@ -73,7 +73,6 @@
                 <li class="list-group-item">Model:{{ $car->model }}</li>
 
                 <li class="list-group-item disabled">Product on : {{ $car->produced_on}}</li>
-
             </ul>
         </div>
     </div>
