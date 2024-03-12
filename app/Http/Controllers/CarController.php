@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Car;
 
 class CarController extends Controller
@@ -14,8 +15,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars=Car::all();
-        return view('car-list',compact('cars'));
+        $cars = Car::all();
+        return view('car-list', compact('cars'));
     }
 
     /**
@@ -25,7 +26,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        //
+        return view('car-create');
     }
 
     /**
@@ -34,9 +35,47 @@ class CarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'model' => 'required',
+            'produced_on' => 'required|date',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'model.required' => 'Vui lòng nhập model',
+            'produced_on.required' => 'Vui lòng nhập produced_on',
+            'produced_on.date' => 'produced_on phải là một ngày hợp lệ',
+            'description.required' => 'Vui lòng nhập description',
+            'image.required' => 'Vui lòng chọn ảnh',
+            'image.image' => 'Định dạng hình ảnh không hợp lệ',
+            'image.mimes' => 'Định dạng hình ảnh phải là jpeg, png, jpg hoặc gif',
+            'image.max' => 'Kích thước hình ảnh không được vượt quá 2MB',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $car = new Car();
+
+        $car->model = $request->input('model');
+        $car->produced_on = $request->input('produced_on');
+        $car->description = $request->input('description');
+
+        $image = $request->file('image');
+
+        $imageName = time() . '_' . $image->getClientOriginalName();
+
+        $image->move(public_path('images'), $imageName);
+        $car->image = $imageName;
+
+        $car->save();
+
+        $function = 'Thêm mới sản phẩm thành công';
+
+        return redirect()->route('cars.index')->with('message', $function);
     }
 
     /**
@@ -47,9 +86,9 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        //
-        $car=Car::find($id);
-        return view('car-detail',compact('car'));
+        $car = Car::find($id);
+        // dd($car);
+        return view('car-detail', compact('car'));
     }
 
     /**
@@ -68,7 +107,7 @@ class CarController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
