@@ -64,6 +64,9 @@
 
 <body>
     <div class="container">
+        <td>
+            <a href="{{ route('cars.create') }}" class="btn btn-primary">Tạo</a>
+        </td>
         <h2 class="custom-title">Danh sách xe</h2>
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
@@ -74,18 +77,24 @@
                         <th>Model</th>
                         <th>Produced_on</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($cars as $car)
                     <tr>
-                        <td> <a name="" id="" class="btn btn-primary" href="" role="button">{{ $car->id }}</a></td>
+                        <td>{{ $car->id }}</td>
                         <td>{{ $car->description }}</td>
                         <td>{{ $car->model }}</td>
                         <td>{{ $car->produced_on }}</td>
-
-                        <td> <img src="{{'/images/'.$car->image}}" style="width: 30%"></td>
-                        <td><a name="" id="" class="btn btn-primar  y" href="{{'/cars/'. $car -> id}}" role="button">Chi tiết</a></td>
+                        <td><img src="{{'/images/'.$car->image}}" style="width: 100px;"></td>
+                        <td>
+                            <a href="{{ route('cars.edit', $car->id) }}" class="btn btn-primary">Chỉnh sửa</a>
+                        </td>
+                        {{-- <td>
+                            <a href="{{ route('cars.destroy', $car->id) }}" class="btn btn-primary">Xóa</a>
+                        </td>
+                        --}}
                     </tr>
                     @endforeach
                 </tbody>
