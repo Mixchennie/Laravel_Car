@@ -1,10 +1,18 @@
+html
+Copy
+<!-- ... mã HTML khác ... -->
+
+<div class="mt-3">
+    <a class="btn btn-primary" href="{{ route('cars.create') }}">Tạo mới</a>
+    <a class="btn btn-warning" href="{{ route('cars.edit', $car->id) }}">Cập nhật</a>
+    <form action="{{ route('cars.destroy', $car->id) }}"<!-- resources/views/car-detail.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chi tiết xe</title>
 
     <!-- Liên kết CSS của Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -65,18 +73,26 @@
     <div class="container">
         <h2 class="custom-title">Chi tiết xe</h2>
         <div class="car-details">
-            <img src="{{"/images/".$car->image}}" alt="Car Image">
+            <img src="{{ "/images/".$car->image }}" alt="Car Image">
 
             <ul class="list-group">
-                <li class="list-group-item active">Car:{{ $car->id }}</li>
-                <li class="list-group-item"> Description:{{ $car->description }}</li>
-                <li class="list-group-item">Model:{{ $car->model }}</li>
-
-                <li class="list-group-item disabled">Product on : {{ $car->produced_on}}</li>
+                <li class="list-group-item active">Car: {{ $car->id }}</li>
+                <li class="list-group-item">Description: {{ $car->description }}</li>
+                <li class="list-group-item">Model: {{ $car->model }}</li>
+                <li class="list-group-item disabled">Produced on: {{ $car->produced_on }}</li>
             </ul>
+
+            <div class="mt-3">
+                <a class="btn btn-primary" href="{{ route('cars.create') }}">Tạo mới</a>
+                <a class="btn btn-warning" href="{{ route('cars.edit', $car->id) }}">Cập nhật</a>
+                <form action="{{ route('cars.destroy', $car->id) }}" method="POST" style="display: inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa xe này?')">Xóa</button>
+                </form>
+            </div>
         </div>
     </div>
-
     <!-- Liên kết JavaScript của Bootstrap (tùy chọn) -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

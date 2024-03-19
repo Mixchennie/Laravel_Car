@@ -90,22 +90,24 @@
         function previewImage(input) {
             var preview = document.getElementById('image-preview');
             var file = input.files[0];
-
-            if (file) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block'; // Display the image preview
-                };
-
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = '#';
-                preview.style.display = 'none'; // Hide the image preview
-            }
+    
+            // Kiểm tra nếu một trong các trường thông tin được nhập
+                if (file) {
+                    var reader = new FileReader();
+    
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block'; // Hiển thị xem trước ảnh
+                    };
+    
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = '#';
+                    preview.style.display = 'none'; // Ẩn xem trước ảnh
+                }
         }
     </script>
+    
 </body>
 
 </html>
